@@ -1,7 +1,10 @@
 import React from "react";
 import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
 import Button from "@material-ui/core/Button";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import UserInfo from "./UserInfo"
 
 const API_URL = "https://randomuser.me/api/"
 
@@ -39,21 +42,30 @@ class App extends React.Component {
 
     return (
       <Container className="App" maxWidth="sm">
-        <Button variant="outlined" color="primary" disabled={isLoading} onClick={() => this.fetchUser()}>
-          Fetch user
-        </Button>
         {error && <h1>{error.message}</h1>}
         {isLoading && <CircularProgress />}
         {!isLoading &&
-          <React.Fragment>
-            <h1>Seed: {fetchedData.info.seed}</h1>
-            {fetchedData.results.map((result, index) => (
-              <h1 key={index}>
-                {result.gender}
-              </h1>
-            ))}
-          </React.Fragment>
+          <Grid container>
+            <Grid item xs={2}>
+              <Avatar alt="Remy Sharp" src={fetchedData.results[0].picture.thumbnail} />
+            </Grid>
+            <Grid item xs={10}>
+              <UserInfo {...fetchedData.results[0]}/>
+            </Grid>
+          </Grid>
         }
+        <Grid container>
+          <Grid item xs={12}>
+            <Button
+              variant="outlined"
+              color="primary"
+              disabled={isLoading}
+              fullWidth
+              onClick={() => this.fetchUser()}>
+              Fetch user
+        </Button>
+          </Grid>
+        </Grid>
       </Container>
     )
   }
